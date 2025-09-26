@@ -43,7 +43,7 @@ jobs:
         clone_dir: /home/crowuser/main
         source_url: env=SOURCE_URL
         branches: 
-        - main
+        - master
         provider: github
         username: Devops-Bot-Official
         token: env=GIT_TOKEN
