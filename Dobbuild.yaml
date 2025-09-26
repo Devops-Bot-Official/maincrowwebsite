@@ -5,26 +5,26 @@ category: Production
 username: crowuser
 environment:
   # === Crowstore-backed values ===
-  SOURCE_URL:   { value: crowstore://frontendurl }
+  SOURCE_URL:   { value: crowstore://MAINFRONTEND_URL }
   GIT_TOKEN:    { value: crowstore://gittoken }
   
   DOCKER_USERNAME:    { value: crowstore://CROWREGNAME }
   DOCKER_PASSWORD:    { value: crowstore://CROWREGNAMEPASS }
 
-  IMAGE_NAME:    { value: crowstore://imageame }
+  IMAGE_NAME:    { value: crowstore://MAINIMAGE }
 
   # These must match the *names after* crowstore:// exactly (uppercased, no extra underscores).
-  CROWSTORE_TOKEN_FRONTENDURL:   { value: c1b966b518f942abc727c91a26d40c51 }
+  CROWSTORE_TOKEN_MAINFRONTEND_URL:   { value: 69e8fd127c2d5341fbb05dca396bba74 }
 
   CROWSTORE_TOKEN_GITTOKEN:    { value: ee63e33b6b98a72756d732e115a5d256 }
  
   CROWSTORE_TOKEN_CROWREGNAME: { value: 59618baf11885921fbcb491b420b0856 }
   CROWSTORE_TOKEN_CROWREGNAMEPASS: { value: 03ba3a029d583c5c73c4464a9f85cd1d }
   
-  CROWSTORE_TOKEN_IMAGEAME: { value: b76e56eb842600e44e69c2854d4f66d7 }
+  CROWSTORE_TOKEN_MAINIMAGE: { value: ebfd5174140d3324199d037c6aa10c50 }
 
 jobs:
-- name: CROW PROD PORTAL BUILD
+- name: CROW PROD MAIN WEBSITE BUILD
   stages:
   - name: Updating Azure Server
     tasks:
@@ -40,7 +40,7 @@ jobs:
         enabled: true
         private_repo: true
         # --- required / important fields your function expects ---
-        clone_dir: /home/crowuser/portal
+        clone_dir: /home/crowuser/main
         source_url: env=SOURCE_URL
         branches: 
         - main
@@ -53,7 +53,7 @@ jobs:
     tasks:
       npm:
         enabled: true
-        working_directory: "/home/crowuser/portal"
+        working_directory: "/home/crowuser/main"
         # DO NOT set node_env here
         clean_node_modules: true         # optional but recommended after Node upgrade
         omit_dev: false                  # ensure dev deps are allowed
@@ -75,7 +75,7 @@ jobs:
     tasks:
       npm:
         enabled: true
-        working_directory: "/home/crowuser/portal"
+        working_directory: "/home/crowuser/main"
         node_env: "production"           # only for the build step
         omit_dev: false                  # irrelevant here; we are not instal
         steps:
@@ -92,7 +92,7 @@ jobs:
         enabled: true
         image_name: env=IMAGE_NAME
         build_tag: V.0.0.1
-        dockerfile_path: /home/crowuser/portal/Dockerfile     
+        dockerfile_path: /home/crowuser/main/Dockerfile     
                          
           
   - name: docker push stage
